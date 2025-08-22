@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Notas</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/notas.css">
+</head>
+<body>
+<header>
+    <h1>Minhas Notas</h1>
+    <button onclick="logout()" class="logout-btn">Sair</button>
+</header>
+
+<main>
+    <div class="nova-nota">
+        <input type="text" id="tituloNota" placeholder="Título da nota">
+        <textarea id="conteudoNota" placeholder="Escreva sua nota..."></textarea>
+        <button onclick="criarNota()">Criar Nota</button>
+    </div>
+
+    <div id="listaNotas" class="lista-notas">
+        <!-- As notas aparecerão aqui -->
+    </div>
+</main>
+
+<script src="../js/utils.js"></script>
+<script src="../js/notas.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Bloco de Notas - Cadastro</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+<div class="container">
+    <h1>Bloco de Notas</h1>
+
+
+    <div id="cadastroForm" class="form-container">
+        <h2>Criar Conta</h2>
+        <input type="text" id="cadastroNome" placeholder="Nome">
+        <input type="email" id="cadastroEmail" placeholder="Email">
+        <input type="password" id="cadastroSenha" placeholder="Senha">
+        <button onclick="cadastrar()">Cadastrar</button>
+        <p class="trocar" onclick="mostrarLogin()">Já tem uma conta? Entrar</p>
+    </div>
+
+
+    <div id="loginForm" class="form-container hidden">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginSenha" placeholder="Senha">
+        <button onclick="login()">Entrar</button>
+        <p class="trocar" onclick="mostrarCadastro()">Não tem conta? Criar conta</p>
+    </div>
+</div>
+<script src="../js/utils.js"></script>
+<script src="../js/auth.js"></script>
+</body>
+</html>

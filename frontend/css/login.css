@@ -1,0 +1,32 @@
+.form-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+.trocar {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #555;
+    cursor: pointer;
+    text-align: center;
+}
+
+
+.trocar:hover {
+    text-decoration: underline;
+}
+
+
+.hidden {
+    display: none;
+}

@@ -1,4 +1,5 @@
 package com.blocodenotas.backend.controllers;
+
 import com.blocodenotas.backend.dtos.NotaDTO;
 import com.blocodenotas.backend.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +15,28 @@ public class NotaController {
     @Autowired
     private NotaService notaService;
 
-    @PostMapping()
+    // Criar nota
+    @PostMapping
     public ResponseEntity<NotaDTO> criarNota(@RequestBody NotaDTO notaDTO) {
         return ResponseEntity.ok(notaService.salvarNota(notaDTO));
     }
 
-    @PutMapping()
-    public ResponseEntity<NotaDTO> atualizarNota(@RequestBody NotaDTO notaDTO) {
+    // Atualizar nota
+    @PutMapping("/{id}")
+    public ResponseEntity<NotaDTO> atualizarNota(@PathVariable Long id, @RequestBody NotaDTO notaDTO) {
+        notaDTO.setId(id);
         return ResponseEntity.ok(notaService.atualizarNota(notaDTO));
     }
 
-    @DeleteMapping()
-    public ResponseEntity<Void> deletarNota(@RequestBody NotaDTO notaDTO)  {
-        notaService.deletarNota(notaDTO.getId());
+    // Deletar nota
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarNota(@PathVariable Long id) {
+        notaService.deletarNota(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/todos")
+    // Listar todas as notas (debug/admin)
+    @GetMapping
     public ResponseEntity<List<NotaDTO>> buscarTodasNotas() {
         List<NotaDTO> notas = notaService.buscarTodasNotasDTO();
         return ResponseEntity.ok(notas);

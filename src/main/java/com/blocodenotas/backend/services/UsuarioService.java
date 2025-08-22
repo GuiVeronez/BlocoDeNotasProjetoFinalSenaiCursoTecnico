@@ -6,33 +6,54 @@ import com.blocodenotas.backend.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    // Salvar usuário (cadastro)
     public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
-        Usuario usuario = converterUsuarioDTOParaUsuario(usuarioDTO);
+        Usuario usuario = converterDTOParaUsuario(usuarioDTO);
         usuario = usuarioRepository.save(usuario);
-        return converterUsuarioParaUsuarioDTO(usuario);
+        return converterUsuarioParaDTO(usuario);
     }
 
-    public UsuarioDTO converterUsuarioParaUsuarioDTO(Usuario usuario) {
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setNome(usuario.getNome());
-        usuarioDTO.setEmail(usuario.getEmail());
-        usuarioDTO.setSenha(usuario.getSenha());
-        return usuarioDTO;
+    // Autenticar usuário (login)
+    public UsuarioDTO autenticarUsuario(String email, String senha) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmailAndSenha(email, senha);
+        return usuario.map(this::converterUsuarioParaDTO).orElse(null);
     }
 
-    public Usuario converterUsuarioDTOParaUsuario(UsuarioDTO usuarioDTO) {
+    // Buscar todos os usuários
+    public List<UsuarioDTO> buscarTodosUsuariosDTO() {
+        return usuarioRepository.findAll()
+                .stream()
+                .map(this::converterUsuarioParaDTO)
+                .collect(Collectors.toList());
+    }
+
+    // Converte de entidade para DTO
+    public UsuarioDTO converterUsuarioParaDTO(Usuario usuario) {
+        UsuarioDTO dto = new UsuarioDTO();
+        dto.setId(usuario.getId());
+        dto.setNome(usuario.getNome());
+        dto.setEmail(usuario.getEmail());
+        dto.setSenha(usuario.getSenha());
+        return dto;
+    }
+
+    // Converte de DTO para entidade
+    public Usuario converterDTOParaUsuario(UsuarioDTO dto) {
         Usuario usuario = new Usuario();
-        usuario.setId(usuarioDTO.getId());
-        usuario.setNome(usuarioDTO.getNome());
-        usuario.setEmail(usuarioDTO.getEmail());
-        usuario.setSenha(usuarioDTO.getSenha());
+        usuario.setId(dto.getId());
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha(dto.getSenha());
         return usuario;
     }
 }

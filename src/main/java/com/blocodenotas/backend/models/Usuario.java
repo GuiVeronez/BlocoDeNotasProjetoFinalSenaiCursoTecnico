@@ -56,6 +56,14 @@ public class Usuario {
         this.senha = senha;
     }
 
+    public Set<Nota> getNotas() {
+        return notas;
+    }
+
+    public void setNotas(Set<Nota> notas) {
+        this.notas = notas;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -78,9 +86,9 @@ public class Usuario {
                 '}';
     }
 
-    @OneToMany(mappedBy = "usuarioNota", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<Nota> notas = new HashSet<>();
 
-    @OneToMany(mappedBy = "usuarioPasta", fetch = FetchType.LAZY)
-    private Set<Pasta> pastas = new HashSet<>();
+//    @OneToMany(mappedBy = "usuarioPasta", fetch = FetchType.LAZY)
+//    private Set<Pasta> pastas = new HashSet<>();
 }

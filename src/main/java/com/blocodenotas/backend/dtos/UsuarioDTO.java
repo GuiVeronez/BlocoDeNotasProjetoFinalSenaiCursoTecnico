@@ -1,6 +1,6 @@
 package com.blocodenotas.backend.dtos;
 import com.blocodenotas.backend.models.Nota;
-import com.blocodenotas.backend.models.Pasta;
+//import com.blocodenotas.backend.models.Pasta;
 import jakarta.persistence.*;
 
 import java.util.HashSet;

@@ -15,12 +15,19 @@ public class Nota {
     private String titulo;
     private String conteudo;
 
+    // Relacionamento com o usuário
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+
     public Nota() {}
 
-    public Nota(Long id, String titulo, String conteudo) {
+    public Nota(Long id, String titulo, String conteudo, Usuario usuario) {
         this.id = id;
         this.titulo = titulo;
         this.conteudo = conteudo;
+        this.usuario = usuario;
     }
 
     public Long getId() {
@@ -47,34 +54,39 @@ public class Nota {
         this.conteudo = conteudo;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Nota nota = (Nota) o;
-        return Objects.equals(id, nota.id) && Objects.equals(titulo, nota.titulo) && Objects.equals(conteudo, nota.conteudo);
+        return Objects.equals(id, nota.id) && Objects.equals(titulo, nota.titulo) && Objects.equals(conteudo, nota.conteudo) && Objects.equals(usuario, nota.usuario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, titulo, conteudo);
+        return Objects.hash(id, titulo, conteudo, usuario);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
     public String toString() {
-        return "Nota{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", conteudo='" + conteudo + '\'' +
-                '}';
+        return super.toString();
     }
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuarioNota;
-
-    @ManyToMany
-    @JoinTable(name = "nota_pasta",
-            joinColumns = @JoinColumn(name = "nota_id"),
-            inverseJoinColumns = @JoinColumn(name = "pasta_id"))
-    private List<Pasta> pasta = new ArrayList<>();;
+    //    @ManyToMany
+//    @JoinTable(name = "nota_pasta",
+//            joinColumns = @JoinColumn(name = "nota_id"),
+//            inverseJoinColumns = @JoinColumn(name = "pasta_id"))
+//    private List<Pasta> pasta = new ArrayList<>();;
 }

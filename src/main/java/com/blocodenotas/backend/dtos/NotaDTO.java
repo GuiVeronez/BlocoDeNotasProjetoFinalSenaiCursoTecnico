@@ -12,23 +12,15 @@ public class NotaDTO {
     private Long id;
     private String titulo;
     private String conteudo;
-    private Usuario usuario;
+    private Long usuarioId;
 
     public NotaDTO() {}
 
-    public NotaDTO(Long id, String titulo, String conteudo, Usuario usuario) {
+    public NotaDTO(Long id, String titulo, String conteudo, Long usuarioId) {
         this.id = id;
         this.titulo = titulo;
         this.conteudo = conteudo;
-        this.usuario = usuario;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        this.usuarioId = usuarioId;
     }
 
     public Long getId() {
@@ -53,5 +45,13 @@ public class NotaDTO {
 
     public void setConteudo(String conteudo) {
         this.conteudo = conteudo;
+    }
+
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }

@@ -1,34 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Bloco de Notas - Cadastro</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/login.css">
+    <meta charset="UTF-8" />
+    <title>Bloco de Notas — Entrar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../css/style.css" />
 </head>
-<body>
-<div class="container">
-    <h1>Bloco de Notas</h1>
+<body class="app app--auth">
+<main class="auth-wrapper fade-in">
+    <h1 class="brand">Bloco de Notas</h1>
 
+    <!-- CADASTRO (visível ao iniciar) -->
+    <section id="cadastro" class="auth-card">
+        <h2>Criar conta</h2>
+        <input id="cad_nome" type="text" placeholder="Seu nome" />
+        <input id="cad_email" type="email" placeholder="E-mail" />
+        <input id="cad_senha" type="password" placeholder="Senha" />
+        <button class="btn btn-primary" onclick="cadastrar()">Cadastrar</button>
+        <p class="swap small">
+            já tem conta?
+            <button class="link" onclick="mostrarLogin()">entrar</button>
+        </p>
+    </section>
 
-    <div id="cadastroForm" class="form-container">
-        <h2>Criar Conta</h2>
-        <input type="text" id="cadastroNome" placeholder="Nome">
-        <input type="email" id="cadastroEmail" placeholder="Email">
-        <input type="password" id="cadastroSenha" placeholder="Senha">
-        <button onclick="cadastrar()">Cadastrar</button>
-        <p class="trocar" onclick="mostrarLogin()">Já tem uma conta? Entrar</p>
-    </div>
+    <!-- LOGIN -->
+    <section id="login" class="auth-card hidden">
+        <h2>Entrar</h2>
+        <input id="log_email" type="email" placeholder="E-mail" />
+        <input id="log_senha" type="password" placeholder="Senha" />
+        <button class="btn btn-primary" onclick="login()">Entrar</button>
+        <p class="swap small">
+            não tem conta?
+            <button class="link" onclick="mostrarCadastro()">criar</button>
+        </p>
+    </section>
+</main>
 
-
-    <div id="loginForm" class="form-container hidden">
-        <h2>Login</h2>
-        <input type="email" id="loginEmail" placeholder="Email">
-        <input type="password" id="loginSenha" placeholder="Senha">
-        <button onclick="login()">Entrar</button>
-        <p class="trocar" onclick="mostrarCadastro()">Não tem conta? Criar conta</p>
-    </div>
-</div>
 <script src="../js/utils.js"></script>
 <script src="../js/auth.js"></script>
 </body>

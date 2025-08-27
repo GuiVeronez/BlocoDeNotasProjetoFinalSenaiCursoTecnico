@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Minhas Notas</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/notas.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../css/style.css" />
 </head>
-<body>
-<header>
-    <h1>Minhas Notas</h1>
-    <button onclick="logout()" class="logout-btn">Sair</button>
+<body class="app">
+<header class="topbar">
+    <h1 class="brand small">Minhas Notas</h1>
+    <nav class="actions">
+        <button class="btn btn-ghost" onclick="trocarConta()">Trocar conta</button>
+        <button class="btn btn-primary" onclick="logout()">Sair</button>
+    </nav>
 </header>
 
-<main>
-    <div class="nova-nota">
-        <input type="text" id="tituloNota" placeholder="Título da nota">
-        <textarea id="conteudoNota" placeholder="Escreva sua nota..."></textarea>
-        <button onclick="criarNota()">Criar Nota</button>
-    </div>
+<main class="layout">
+    <!-- Esquerda: criar/editar nota -->
+    <section class="panel panel--editor fade-in">
+        <h2>Nova nota</h2>
+        <input id="tituloNota" class="input" type="text" placeholder="Título" />
+        <textarea id="conteudoNota" class="input input--area" placeholder="Escreva sua nota..."></textarea>
+        <button id="btnSalvar" class="btn btn-primary" onclick="criarNota()">Salvar nota</button>
+    </section>
 
-    <div id="listaNotas" class="lista-notas">
-        <!-- As notas aparecerão aqui -->
-    </div>
+    <!-- Direita: lista -->
+    <section class="panel panel--list fade-in" id="listaNotas">
+        <div class="placeholder">Carregando notas...</div>
+    </section>
 </main>
 
 <script src="../js/utils.js"></script>

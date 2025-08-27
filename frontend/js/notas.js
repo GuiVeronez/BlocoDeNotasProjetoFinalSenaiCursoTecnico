@@ -1,63 +1,106 @@
-const API_NOTAS = "http://localhost:8080/api/notas";
-const API_USUARIOS = "http://localhost:8080/usuarios";
-
-async function carregarNotas() {
+document.addEventListener("DOMContentLoaded", () => {
     const usuario = getUsuarioLogado();
-    if (!usuario) return logout();
+    if(!usuario){
+        window.location.href = "index.html";
+        return;
+    }
+    carregarNotas(usuario.id);
+});
 
-    const response = await fetch(`${API_USUARIOS}/${usuario.id}/notas`);
-    const notas = await response.json();
-
+async function carregarNotas(usuarioId){
     const lista = document.getElementById("listaNotas");
-    lista.innerHTML = "";
+    lista.innerHTML = `<div class="placeholder">Carregando notas...</div>`;
 
-    notas.forEach(nota => {
-        const div = document.createElement("div");
-        div.className = "nota";
-        div.innerHTML = `
-      <h3>${nota.titulo}</h3>
-      <p>${nota.conteudo}</p>
-      <button onclick="editarNota(${nota.id}, '${nota.titulo}', '${nota.conteudo}')">Editar</button>
-      <button onclick="deletarNota(${nota.id})">Excluir</button>
-    `;
-        lista.appendChild(div);
-    });
+    try{
+        const resp = await fetch(`${API_USUARIOS}/${usuarioId}/notas`);
+        if(!resp.ok){
+            lista.innerHTML = `<div class="placeholder">Não foi possível carregar as notas.</div>`;
+            return;
+        }
+
+        const notas = await resp.json();
+        if(!Array.isArray(notas) || notas.length === 0){
+            lista.innerHTML = `<div class="placeholder">Nenhuma nota encontrada.</div>`;
+            return;
+        }
+
+        lista.innerHTML = "";
+        notas.forEach(nota => {
+            const card = document.createElement("article");
+            card.className = "nota";
+            card.innerHTML = `
+                <h3>${escapeHtml(nota.titulo || "")}</h3>
+                <p>${escapeHtml(nota.conteudo || "")}</p>
+                <div class="row">
+                  <button class="btn btn-primary" 
+                          data-id="${nota.id}" 
+                          data-titulo="${escapeAttr(nota.titulo||"")}" 
+                          data-conteudo="${escapeAttr(nota.conteudo||"")}"
+                          onclick="abrirEdicao(this)">Editar</button>
+                  <button class="btn btn-ghost" onclick="deletarNota(${nota.id})">Excluir</button>
+                </div>
+            `;
+            lista.appendChild(card);
+        });
+    }catch(e){
+        console.error(e);
+        lista.innerHTML = `<div class="placeholder">Erro inesperado.</div>`;
+    }
 }
 
-async function criarNota() {
+async function criarNota(){
     const usuario = getUsuarioLogado();
-    const titulo = document.getElementById("tituloNota").value;
-    const conteudo = document.getElementById("conteudoNota").value;
+    if(!usuario){ logout(); return; }
+
+    const titulo   = document.getElementById("tituloNota").value.trim();
+    const conteudo = document.getElementById("conteudoNota").value.trim();
+    if(!titulo && !conteudo) return;
 
     await fetch(API_NOTAS, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type":"application/json" },
         body: JSON.stringify({ titulo, conteudo, usuarioId: usuario.id })
     });
 
-    carregarNotas();
+    document.getElementById("tituloNota").value = "";
+    document.getElementById("conteudoNota").value = "";
+    carregarNotas(usuario.id);
 }
 
-async function editarNota(id, titulo, conteudo) {
-    const novoTitulo = prompt("Editar título:", titulo);
-    const novoConteudo = prompt("Editar conteúdo:", conteudo);
-
-    if (novoTitulo && novoConteudo) {
-        await fetch(`${API_NOTAS}/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id, titulo: novoTitulo, conteudo: novoConteudo })
-        });
-        carregarNotas();
-    }
+function abrirEdicao(btn){
+    const id = btn.dataset.id;
+    const tituloAtual = btn.dataset.titulo;
+    const conteudoAtual = btn.dataset.conteudo;
+    editarNota(id, tituloAtual, conteudoAtual);
 }
 
-async function deletarNota(id) {
-    if (confirm("Deseja excluir esta nota?")) {
-        await fetch(`${API_NOTAS}/${id}`, { method: "DELETE" });
-        carregarNotas();
-    }
+async function editarNota(id, tituloAtual, conteudoAtual){
+    const usuario = getUsuarioLogado();
+    if(!usuario){ logout(); return; }
+
+    const novoTitulo = prompt("Editar título:", tituloAtual);
+    if(novoTitulo === null) return;
+
+    const novoConteudo = prompt("Editar conteúdo:", conteudoAtual);
+    if(novoConteudo === null) return;
+
+    await fetch(`${API_NOTAS}/${id}`, {   // <-- id vai na URL
+        method: "PUT",
+        headers: { "Content-Type":"application/json" },
+        body: JSON.stringify({ titulo: novoTitulo, conteudo: novoConteudo, usuarioId: usuario.id })
+    });
+
+    carregarNotas(usuario.id);
 }
 
-// Carrega as notas assim que abrir a página
-document.addEventListener("DOMContentLoaded", carregarNotas);
+async function deletarNota(id){
+    const usuario = getUsuarioLogado();
+    if(!usuario){ logout(); return; }
+    if(!confirm("Deseja excluir esta nota?")) return;
+
+    await fetch(`${API_NOTAS}/${id}`, {  // <-- id vai na URL
+        method: "DELETE"
+    });
+
+    carregarNotas(usuario.id);
+}

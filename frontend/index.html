@@ -41,37 +41,37 @@
         }
 
         .dark-mode {
-            --primary: #3F83E3;
-            --secondary: #9B6DD9;
+            --primary: #5E97F6;
+            --secondary: #B18BEF;
             --accent: #FFD54A;
-            --background: #1A1A1A;
-            --surface: #2A2A2A;
-            --on-background: #EEF1F7;
-            --on-surface: #EEF1F7;
+            --background: #121212;
+            --surface: #1E1E1E;
+            --on-background: #E0E0E0;
+            --on-surface: #E0E0E0;
             --on-primary: #FFFFFF;
-            --border: #404040;
-            --shadow: rgba(0, 0, 0, 0.3);
+            --border: #424242;
+            --shadow: rgba(0, 0, 0, 0.5);
             --hover: rgba(255, 255, 255, 0.05);
-            --error: #E14242;
-            --success: #66C16E;
-            --warning: #FFD54A;
-            --auth-bg: #1A1A1A;
+            --error: #F44336;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --auth-bg: #121212;
 
             /* Novas cores para o modo escuro */
-            --auth-card-bg: #3F83E3;
-            --auth-tab-active: #EEF1F7;
-            --auth-button-color: #66C16E;
-            --auth-button-text: #1A1A1A;
-            --sidebar-bg: #66C16E;
-            --add-note-color: #FFD54A;
-            --add-note-border: #1A1A1A;
-            --note-hover-border: #66C16E;
-            --save-button-border: #66C16E;
-            --input-border: #66C16E;
-            --input-focus-border: #9B6DD9;
-            --note-editor-border: #9B6DD9;
+            --auth-card-bg: #2D3748;
+            --auth-tab-active: #5E97F6;
+            --auth-button-color: #5E97F6;
+            --auth-button-text: #FFFFFF;
+            --sidebar-bg: #2D3748;
+            --add-note-color: #5E97F6;
+            --add-note-border: #5E97F6;
+            --note-hover-border: #5E97F6;
+            --save-button-border: #4CAF50;
+            --input-border: #424242;
+            --input-focus-border: #5E97F6;
+            --note-editor-border: #424242;
             --selected-note-bg: #2A2A2A;
-            --note-border-accent: #66C16E;
+            --note-border-accent: #5E97F6;
         }
 
         * {
@@ -206,6 +206,36 @@
             transition: background-color 0.3s ease;
         }
 
+        .auth-header {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .auth-header-button {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--on-surface);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-header-button:hover {
+            background-color: var(--hover);
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+
         .auth-card {
             background-color: var(--auth-card-bg);
             border-radius: 16px;
@@ -297,7 +327,7 @@
         }
 
         .dark-mode .form-group label {
-            color: #1A1A1A;
+            color: var(--on-surface);
         }
 
         .form-group input {
@@ -622,7 +652,7 @@
         }
 
         .dark-mode .notes-title {
-            border-color: #9B6DD9;
+            border-color: var(--input-border);
         }
 
         .notes-title:focus {
@@ -692,7 +722,7 @@
         }
 
         .dark-mode .note-editor textarea {
-            border-color: #9B6DD9;
+            border-color: var(--note-editor-border);
         }
 
         .note-editor textarea:focus {
@@ -1024,6 +1054,15 @@
 <body>
 <!-- Tela de Autenticação -->
 <div class="auth-container" id="auth-container">
+    <div class="auth-header">
+        <button class="auth-header-button" id="auth-theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="auth-header-button" id="auth-fullscreen-toggle">
+            <i class="fas fa-expand"></i>
+        </button>
+    </div>
+
     <div class="auth-card" id="auth-card">
         <div class="app-logo">
             <i class="fas fa-sticky-note"></i>
@@ -1074,7 +1113,7 @@
         </div>
         <div class="header-actions">
             <button class="header-button" id="theme-toggle">
-                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
             </button>
             <button class="header-button" id="fullscreen-toggle">
                 <i class="fas fa-expand"></i>
@@ -1120,7 +1159,7 @@
 
         <div class="notes-content">
             <div class="notes-header">
-                <input type="text" class="notes-title" id="note-title-input" placeholder="Título da nota" value="Nota de exemplo">
+                <input type="text" class="notes-title" id="note-title-input" placeholder="Título da nota">
                 <div class="notes-actions">
                     <button class="action-btn" id="save-note-btn">
                         <i class="fas fa-save"></i> Salvar
@@ -1130,548 +1169,483 @@
                     </button>
                 </div>
             </div>
-
             <div class="note-editor">
-                <textarea id="note-content-input">Esta é uma nota de exemplo para demonstrar o layout e funcionalidades do bloco de notas.</textarea>
+                <textarea id="note-content-input" placeholder="Comece a escrever sua nota aqui..."></textarea>
             </div>
+        </div>
 
-            <div id="empty-state" class="empty-state">
-                <i class="fas fa-lightbulb"></i>
-                <p>Parece que você ainda não tem nenhuma nota.<br>Crie sua primeira nota para começar!</p>
-                <button id="create-first-note">Criar Primeira Nota</button>
-            </div>
+        <div class="empty-state visible" id="empty-state">
+            <i class="fas fa-sticky-note"></i>
+            <p>Nenhuma nota selecionada. Selecione uma nota existente ou crie uma nova.</p>
+            <button id="empty-add-note-btn">
+                Criar nova nota
+            </button>
         </div>
     </div>
 </div>
 
-<!-- Modal personalizado para confirmação -->
+<!-- Modal de confirmação -->
 <div class="custom-modal" id="confirm-modal">
     <div class="custom-modal-content">
         <div class="custom-modal-header">
-            <h2 class="custom-modal-title">Confirmar exclusão</h2>
-            <button class="custom-modal-close" id="confirm-modal-close">&times;</button>
+            <h3 class="custom-modal-title">Confirmar ação</h3>
+            <button class="custom-modal-close">&times;</button>
         </div>
         <div class="custom-modal-body">
             <p>Tem certeza que deseja excluir esta nota? Esta ação não pode ser desfeita.</p>
         </div>
         <div class="custom-modal-footer">
-            <button class="custom-modal-btn cancel" id="confirm-modal-cancel">Cancelar</button>
-            <button class="custom-modal-btn confirm" id="confirm-modal-confirm">Excluir</button>
+            <button class="custom-modal-btn cancel">Cancelar</button>
+            <button class="custom-modal-btn confirm">Excluir</button>
         </div>
     </div>
 </div>
 
 <!-- Toast de notificação -->
 <div class="toast" id="toast">
-    <i class="fas fa-check" id="toast-icon"></i>
+    <i class="fas fa-check-circle"></i>
     <span id="toast-message">Operação realizada com sucesso!</span>
 </div>
 
 <script>
-    // Variáveis globais
-    let currentUser = null;
-    let currentNote = null;
-    let userNotes = [];
-    let isDarkMode = false;
-    let isFullscreen = false;
-    const API_BASE = 'http://localhost:8080';
-
-    // Elementos da DOM
+    // Elementos DOM
     const authContainer = document.getElementById('auth-container');
-    const authCard = document.getElementById('auth-card');
     const appContainer = document.getElementById('app-container');
-    const loginTab = document.getElementById('login-tab');
-    const registerTab = document.getElementById('register-tab');
+    const authCard = document.getElementById('auth-card');
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const loginTab = document.getElementById('login-tab');
+    const registerTab = document.getElementById('register-tab');
     const themeToggle = document.getElementById('theme-toggle');
+    const authThemeToggle = document.getElementById('auth-theme-toggle');
     const fullscreenToggle = document.getElementById('fullscreen-toggle');
+    const authFullscreenToggle = document.getElementById('auth-fullscreen-toggle');
+    const logoutBtn = document.getElementById('logout-btn');
     const userAvatar = document.getElementById('user-avatar');
     const userName = document.getElementById('user-name');
-    const logoutBtn = document.getElementById('logout-btn');
     const addNoteBtn = document.getElementById('add-note-btn');
+    const emptyAddNoteBtn = document.getElementById('empty-add-note-btn');
     const notesList = document.getElementById('notes-list');
     const noteTitleInput = document.getElementById('note-title-input');
     const noteContentInput = document.getElementById('note-content-input');
     const saveNoteBtn = document.getElementById('save-note-btn');
     const deleteNoteBtn = document.getElementById('delete-note-btn');
     const emptyState = document.getElementById('empty-state');
-    const createFirstNoteBtn = document.getElementById('create-first-note');
-
-    // Elementos do modal personalizado
     const confirmModal = document.getElementById('confirm-modal');
-    const confirmModalClose = document.getElementById('confirm-modal-close');
-    const confirmModalCancel = document.getElementById('confirm-modal-cancel');
-    const confirmModalConfirm = document.getElementById('confirm-modal-confirm');
-
-    // Elementos do toast
     const toast = document.getElementById('toast');
-    const toastIcon = document.getElementById('toast-icon');
-    const toastMessage = document.getElementById('toast-message');
 
-    // Event Listeners
-    loginTab.addEventListener('click', () => switchAuthTab('login'));
-    registerTab.addEventListener('click', () => switchAuthTab('register'));
-    loginForm.addEventListener('submit', handleLogin);
-    registerForm.addEventListener('submit', handleRegister);
-    themeToggle.addEventListener('click', toggleTheme);
-    fullscreenToggle.addEventListener('click', toggleFullscreen);
-    logoutBtn.addEventListener('click', logout);
-    addNoteBtn.addEventListener('click', createNewNote);
-    saveNoteBtn.addEventListener('click', saveCurrentNote);
-    deleteNoteBtn.addEventListener('click', showDeleteConfirmation);
-    createFirstNoteBtn.addEventListener('click', createNewNote);
+    // Estado da aplicação
+    let currentUser = null;
+    let notes = [];
+    let currentNoteId = null;
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
 
-    // Event listeners do modal personalizado
-    confirmModalClose.addEventListener('click', closeConfirmModal);
-    confirmModalCancel.addEventListener('click', closeConfirmModal);
-    confirmModalConfirm.addEventListener('click', deleteCurrentNote);
-    confirmModal.addEventListener('click', (e) => {
-        if (e.target === confirmModal) closeConfirmModal();
-    });
+    // Inicialização
+    function init() {
+        // Verificar se o usuário está logado
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            showApp();
+        } else {
+            showAuth();
+        }
 
-    // Event listener para controlar o scroll da textarea
-    noteContentInput.addEventListener('input', toggleTextareaScroll);
-    noteContentInput.addEventListener('focus', handleTextareaFocus);
+        // Aplicar modo escuro se estiver ativo
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            authThemeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
 
-    // Verificar preferência de tema no localStorage
-    if (localStorage.getItem('darkMode') === 'true') {
-        enableDarkMode();
+        // Configurar event listeners
+        setupEventListeners();
     }
 
-    // Inicializar a tela de login com animação
-    window.addEventListener('load', () => {
-        authContainer.style.display = 'flex';
-        setTimeout(() => {
-            authCard.classList.add('visible');
-        }, 10);
+    // Configurar event listeners
+    function setupEventListeners() {
+        // Alternar entre login e cadastro
+        loginTab.addEventListener('click', () => switchAuthTab('login'));
+        registerTab.addEventListener('click', () => switchAuthTab('register'));
 
-        // Esconder empty state inicialmente
-        emptyState.classList.remove('visible');
+        // Formulários de autenticação
+        loginForm.addEventListener('submit', handleLogin);
+        registerForm.addEventListener('submit', handleRegister);
 
-        // Adicionar animação de brilho ao botão "Criar Primeira Nota"
-        createFirstNoteBtn.classList.add('animate-glow');
-    });
+        // Alternar tema
+        themeToggle.addEventListener('click', toggleDarkMode);
+        authThemeToggle.addEventListener('click', toggleDarkMode);
 
-    // Funções de Autenticação
+        // Tela cheia
+        fullscreenToggle.addEventListener('click', toggleFullscreen);
+        authFullscreenToggle.addEventListener('click', toggleFullscreen);
+
+        // Logout
+        logoutBtn.addEventListener('click', handleLogout);
+
+        // Notas
+        addNoteBtn.addEventListener('click', createNewNote);
+        emptyAddNoteBtn.addEventListener('click', createNewNote);
+        saveNoteBtn.addEventListener('click', saveCurrentNote);
+        deleteNoteBtn.addEventListener('click', confirmDeleteNote);
+
+        // Modal de confirmação
+        document.querySelector('.custom-modal-close').addEventListener('click', closeModal);
+        document.querySelector('.custom-modal-btn.cancel').addEventListener('click', closeModal);
+        document.querySelector('.custom-modal-btn.confirm').addEventListener('click', deleteCurrentNote);
+
+        // Input de nota
+        noteTitleInput.addEventListener('input', handleNoteInput);
+        noteContentInput.addEventListener('input', handleNoteInput);
+    }
+
+    // Alternar entre as abas de login e cadastro
     function switchAuthTab(tab) {
-        // Remover a classe active de todas as abas e formulários
-        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.auth-form').forEach(f => {
-            f.classList.remove('active');
-            f.style.opacity = '0';
-            f.style.height = '0';
-        });
-
-        // Adicionar a classe active à aba e formulário selecionados
         if (tab === 'login') {
             loginTab.classList.add('active');
+            registerTab.classList.remove('active');
             loginForm.classList.add('active');
-            loginForm.style.opacity = '1';
-            loginForm.style.height = 'auto';
+            registerForm.classList.remove('active');
         } else {
             registerTab.classList.add('active');
+            loginTab.classList.remove('active');
             registerForm.classList.add('active');
-            registerForm.style.opacity = '1';
-            registerForm.style.height = 'auto';
+            loginForm.classList.remove('active');
         }
     }
 
-    async function handleLogin(e) {
+    // Manipular login
+    function handleLogin(e) {
         e.preventDefault();
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
 
-        if (!email || !password) {
-            showToast('Por favor, preencha todos os campos.', 'error');
-            return;
-        }
+        // Verificar se o usuário existe
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
 
-        try {
-            const response = await fetch(`${API_BASE}/usuarios/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, senha: password })
-            });
-
-            if (response.ok) {
-                const user = await response.json();
-                currentUser = user;
-
-                // Animação de transição entre telas
-                authCard.classList.remove('visible');
-
-                setTimeout(() => {
-                    authContainer.style.display = 'none';
-                    appContainer.style.display = 'flex';
-                    setTimeout(() => {
-                        appContainer.classList.add('visible');
-                        showApp();
-                    }, 50);
-                }, 400);
-
-            } else {
-                showToast('Email ou senha incorretos.', 'error');
-            }
-        } catch (error) {
-            console.error('Erro no login:', error);
-            showToast('Erro ao conectar com o servidor.', 'error');
+        if (user) {
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            showApp();
+            showToast('Login realizado com sucesso!');
+        } else {
+            showToast('Email ou senha incorretos!', 'error');
         }
     }
 
-    async function handleRegister(e) {
+    // Manipular cadastro
+    function handleRegister(e) {
         e.preventDefault();
         const name = document.getElementById('register-name').value;
         const email = document.getElementById('register-email').value;
         const password = document.getElementById('register-password').value;
 
-        if (!name || !email || !password) {
-            showToast('Por favor, preencha todos os campos.', 'error');
+        // Verificar se o usuário já existe
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        if (users.some(u => u.email === email)) {
+            showToast('Este email já está em uso!', 'error');
             return;
         }
 
-        if (password.length < 6) {
-            showToast('A senha deve ter pelo menos 6 caracteres.', 'error');
-            return;
-        }
+        // Criar novo usuário
+        const newUser = {
+            id: Date.now().toString(),
+            name,
+            email,
+            password,
+            avatar: name.charAt(0).toUpperCase()
+        };
 
-        try {
-            const response = await fetch(`${API_BASE}/usuarios`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ nome: name, email, senha: password })
-            });
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
 
-            if (response.ok) {
-                showToast('Cadastro realizado com sucesso! Faça login para continuar.', 'success');
-                switchAuthTab('login');
-                registerForm.reset();
-            } else if (response.status === 409) {
-                showToast('Este email já está em uso.', 'error');
-            } else {
-                showToast('Erro ao cadastrar. Tente novamente.', 'error');
-            }
-        } catch (error) {
-            console.error('Erro no cadastro:', error);
-            showToast('Erro ao conectar com o servidor.', 'error');
-        }
+        currentUser = newUser;
+        localStorage.setItem('currentUser', JSON.stringify(newUser));
+        showApp();
+        showToast('Conta criada com sucesso!');
     }
 
-    function showApp() {
-        // Atualizar informações do usuário
-        userAvatar.textContent = currentUser.nome.charAt(0).toUpperCase();
-        userName.textContent = currentUser.nome;
+    // Alternar modo escuro
+    function toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+        localStorage.setItem('darkMode', isDarkMode);
 
-        // Carregar notas do usuário
-        loadUserNotes();
-    }
-
-    function logout() {
-        // Animação de transição entre telas
-        appContainer.classList.remove('visible');
-
-        setTimeout(() => {
-            appContainer.style.display = 'none';
-            authContainer.style.display = 'flex';
-            setTimeout(() => {
-                authCard.classList.add('visible');
-            }, 50);
-        }, 400);
-
-        currentUser = null;
-        currentNote = null;
-        userNotes = [];
-
-        // Reset forms
-        loginForm.reset();
-        registerForm.reset();
-        switchAuthTab('login');
-    }
-
-    // Funções de Tema e Tela Cheia
-    function toggleTheme() {
         if (isDarkMode) {
-            disableDarkMode();
+            document.body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            authThemeToggle.innerHTML = '<i class="fas fa-sun"></i>';
         } else {
-            enableDarkMode();
+            document.body.classList.remove('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            authThemeToggle.innerHTML = '<i class="fas fa-moon"></i>';
         }
     }
 
-    function enableDarkMode() {
-        document.documentElement.classList.add('dark-mode');
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        isDarkMode = true;
-        localStorage.setItem('darkMode', 'true');
-    }
-
-    function disableDarkMode() {
-        document.documentElement.classList.remove('dark-mode');
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-        isDarkMode = false;
-        localStorage.setItem('darkMode', 'false');
-    }
-
+    // Alternar tela cheia
     function toggleFullscreen() {
-        if (!isFullscreen) {
+        if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(err => {
-                console.error('Erro ao tentar entrar em tela cheia:', err);
+                console.error(`Erro ao tentar entrar em modo tela cheia: ${err.message}`);
             });
-            fullscreenToggle.innerHTML = '<i class="fas fa-compress"></i>';
-            isFullscreen = true;
         } else {
-            document.exitFullscreen();
-            fullscreenToggle.innerHTML = '<i class="fas fa-expand"></i>';
-            isFullscreen = false;
-        }
-    }
-
-    // Função para mostrar notificação
-    function showToast(message, type = 'success') {
-        toastMessage.textContent = message;
-
-        // Definir tipo de toast e ícone correspondente
-        toast.classList.remove('error', 'warning', 'success');
-        toast.classList.add(type);
-
-        // Alterar ícone baseado no tipo
-        if (type === 'success') {
-            toastIcon.className = 'fas fa-check';
-        } else if (type === 'error') {
-            toastIcon.className = 'fas fa-times';
-        } else if (type === 'warning') {
-            toastIcon.className = 'fas fa-exclamation-triangle';
-        }
-
-        // Mostrar toast com animação
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 10);
-
-        // Esconder toast após 3 segundos com animação
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    }
-
-    // Função para controlar o scroll da textarea
-    function toggleTextareaScroll() {
-        if (noteContentInput.value === '' || noteContentInput.value === 'Comece a escrever...') {
-            noteContentInput.classList.add('placeholder-mode');
-        } else {
-            noteContentInput.classList.remove('placeholder-mode');
-        }
-    }
-
-    // Função para lidar com o foco na textarea
-    function handleTextareaFocus() {
-        if (noteContentInput.value === 'Comece a escrever...') {
-            noteContentInput.value = '';
-            noteContentInput.classList.remove('placeholder-mode');
-        }
-    }
-
-    // Funções de Notas
-    async function loadUserNotes() {
-        try {
-            const response = await fetch(`${API_BASE}/usuarios/${currentUser.id}/notas`);
-            if (response.ok) {
-                userNotes = await response.json();
-                displayNotesList();
-
-                if (userNotes.length > 0) {
-                    emptyState.classList.remove('visible');
-                    selectNote(userNotes[0]);
-                } else {
-                    emptyState.classList.add('visible');
-                }
-            } else {
-                console.error('Erro ao carregar notas');
-                showToast('Erro ao carregar notas.', 'error');
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
             }
-        } catch (error) {
-            console.error('Erro ao carregar notas:', error);
-            showToast('Erro ao conectar com o servidor.', 'error');
         }
     }
 
-    function displayNotesList() {
+    // Manipular logout
+    function handleLogout() {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        showAuth();
+        showToast('Logout realizado com sucesso!');
+    }
+
+    // Mostrar tela de autenticação
+    function showAuth() {
+        appContainer.style.display = 'none';
+        authContainer.style.display = 'flex';
+
+        setTimeout(() => {
+            authCard.classList.add('visible');
+        }, 100);
+    }
+
+    // Mostrar aplicativo
+    function showApp() {
+        authContainer.style.display = 'none';
+        appContainer.style.display = 'flex';
+
+        setTimeout(() => {
+            appContainer.classList.add('visible');
+            loadUserData();
+            loadNotes();
+        }, 100);
+    }
+
+    // Carregar dados do usuário
+    function loadUserData() {
+        if (currentUser) {
+            userAvatar.textContent = currentUser.avatar;
+            userName.textContent = currentUser.name;
+        }
+    }
+
+    // Carregar notas do usuário
+    function loadNotes() {
+        const allNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+        notes = allNotes.filter(note => note.userId === currentUser.id);
+
+        renderNotesList();
+
+        if (notes.length > 0) {
+            selectNote(notes[0].id);
+        } else {
+            showEmptyState();
+        }
+    }
+
+    // Renderizar lista de notas
+    function renderNotesList() {
         notesList.innerHTML = '';
 
-        if (userNotes.length === 0) {
-            emptyState.classList.add('visible');
-            return;
-        }
-
-        userNotes.forEach(note => {
+        notes.forEach(note => {
+            const noteDate = new Date(note.updatedAt);
             const noteElement = document.createElement('div');
-            noteElement.className = 'note-item';
-            if (currentNote && note.id === currentNote.id) {
-                noteElement.classList.add('selected');
-            }
-
-            // Formatar data e hora
-            const now = new Date();
-            const date = now.toLocaleDateString('pt-BR');
-            const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            noteElement.className = `note-item ${currentNoteId === note.id ? 'selected' : ''}`;
+            noteElement.setAttribute('data-id', note.id);
 
             noteElement.innerHTML = `
-                <div class="note-title">${note.titulo || 'Sem título'}</div>
-                <div class="note-preview">${note.conteudo || 'Sem conteúdo'}</div>
+                <div class="note-title">${note.title || 'Sem título'}</div>
+                <div class="note-preview">${note.content.substring(0, 50)}${note.content.length > 50 ? '...' : ''}</div>
                 <div class="note-date">
-                    <span>${date}</span>
-                    <span>${time}</span>
+                    <span>${noteDate.toLocaleDateString()}</span>
+                    <span>${noteDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                 </div>
             `;
 
-            noteElement.addEventListener('click', () => selectNote(note));
+            noteElement.addEventListener('click', () => selectNote(note.id));
             notesList.appendChild(noteElement);
         });
     }
 
-    function selectNote(note) {
-        currentNote = note;
-        emptyState.classList.remove('visible');
-        noteTitleInput.value = note.titulo || '';
-        noteContentInput.value = note.conteudo || '';
+    // Selecionar nota
+    function selectNote(noteId) {
+        currentNoteId = noteId;
+        const note = notes.find(n => n.id === noteId);
+
+        if (note) {
+            noteTitleInput.value = note.title || '';
+            noteContentInput.value = note.content || '';
+            hideEmptyState();
+        }
 
         // Atualizar a lista para destacar a nota selecionada
-        displayNotesList();
-        toggleTextareaScroll();
+        document.querySelectorAll('.note-item').forEach(item => {
+            if (item.getAttribute('data-id') === noteId) {
+                item.classList.add('selected');
+            } else {
+                item.classList.remove('selected');
+            }
+        });
     }
 
+    // Criar nova nota
     function createNewNote() {
-        currentNote = {
-            id: null,
-            titulo: '',
-            conteudo: '',
-            usuarioId: currentUser.id
+        const newNote = {
+            id: Date.now().toString(),
+            userId: currentUser.id,
+            title: '',
+            content: '',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
         };
 
-        emptyState.classList.remove('visible');
+        notes.unshift(newNote);
+        currentNoteId = newNote.id;
+
+        // Limpar campos de edição
         noteTitleInput.value = '';
         noteContentInput.value = '';
-        noteTitleInput.focus();
-        toggleTextareaScroll();
-    }
 
-    async function saveCurrentNote() {
-        if (!currentNote) return;
+        // Atualizar a interface
+        renderNotesList();
+        hideEmptyState();
 
-        if (!noteTitleInput.value.trim()) {
-            showToast('Por favor, adicione um título à nota.', 'warning');
+        // Focar no título
+        setTimeout(() => {
             noteTitleInput.focus();
-            return;
-        }
+        }, 100);
+    }
 
-        const noteData = {
-            titulo: noteTitleInput.value,
-            conteudo: noteContentInput.value,
-            usuarioId: currentUser.id
-        };
-
-        try {
-            const url = currentNote.id ? `${API_BASE}/api/notas/${currentNote.id}` : `${API_BASE}/api/notas`;
-            const method = currentNote.id ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(noteData)
-            });
-
-            if (response.ok) {
-                const savedNote = await response.json();
-
-                if (!currentNote.id) {
-                    // Nova nota - adicionar à lista
-                    userNotes.push(savedNote);
-                    selectNote(savedNote);
-                    showToast('Nota criada com sucesso!', 'success');
-                } else {
-                    // Nota existente - atualizar na lista
-                    const index = userNotes.findIndex(n => n.id === currentNote.id);
-                    if (index !== -1) {
-                        userNotes[index] = savedNote;
-                    }
-                    showToast('Nota salva com sucesso!', 'success');
-                }
-
-                displayNotesList();
-            } else {
-                showToast('Erro ao salvar nota.', 'error');
-            }
-        } catch (error) {
-            console.error('Erro ao salvar nota:', error);
-            showToast('Erro ao conectar com o servidor.', 'error');
+    // Manipular entrada de nota
+    function handleNoteInput() {
+        // Esta função pode ser usada para salvar automaticamente após um tempo
+        // Por enquanto, apenas verifica se há conteúdo para mostrar/ocultar o estado vazio
+        if (noteTitleInput.value.trim() || noteContentInput.value.trim()) {
+            hideEmptyState();
+        } else {
+            showEmptyState();
         }
     }
 
-    function showDeleteConfirmation() {
-        if (!currentNote || !currentNote.id) {
-            showToast('Nenhuma nota selecionada para excluir.', 'warning');
-            return;
+    // Salvar nota atual
+    function saveCurrentNote() {
+        if (!currentNoteId) return;
+
+        const noteIndex = notes.findIndex(n => n.id === currentNoteId);
+
+        if (noteIndex !== -1) {
+            notes[noteIndex].title = noteTitleInput.value;
+            notes[noteIndex].content = noteContentInput.value;
+            notes[noteIndex].updatedAt = new Date().toISOString();
+
+            // Salvar no localStorage
+            const allNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+            const existingNoteIndex = allNotes.findIndex(n => n.id === currentNoteId);
+
+            if (existingNoteIndex !== -1) {
+                allNotes[existingNoteIndex] = notes[noteIndex];
+            } else {
+                allNotes.push(notes[noteIndex]);
+            }
+
+            localStorage.setItem('notes', JSON.stringify(allNotes));
+
+            // Atualizar a lista
+            renderNotesList();
+            showToast('Nota salva com sucesso!');
+        }
+    }
+
+    // Confirmar exclusão de nota
+    function confirmDeleteNote() {
+        if (!currentNoteId) return;
+        openModal();
+    }
+
+    // Excluir nota atual
+    function deleteCurrentNote() {
+        if (!currentNoteId) return;
+
+        // Remover do array de notas
+        notes = notes.filter(n => n.id !== currentNoteId);
+
+        // Remover do localStorage
+        const allNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+        const updatedNotes = allNotes.filter(n => n.id !== currentNoteId);
+        localStorage.setItem('notes', JSON.stringify(updatedNotes));
+
+        // Atualizar a interface
+        renderNotesList();
+        closeModal();
+
+        if (notes.length > 0) {
+            selectNote(notes[0].id);
+        } else {
+            showEmptyState();
         }
 
+        showToast('Nota excluída com sucesso!');
+    }
+
+    // Mostrar estado vazio
+    function showEmptyState() {
+        emptyState.classList.add('visible');
+        noteTitleInput.style.visibility = 'hidden';
+        noteContentInput.style.visibility = 'hidden';
+    }
+
+    // Ocultar estado vazio
+    function hideEmptyState() {
+        emptyState.classList.remove('visible');
+        noteTitleInput.style.visibility = 'visible';
+        noteContentInput.style.visibility = 'visible';
+    }
+
+    // Abrir modal
+    function openModal() {
         confirmModal.classList.add('active');
     }
 
-    function closeConfirmModal() {
+    // Fechar modal
+    function closeModal() {
         confirmModal.classList.add('closing');
         setTimeout(() => {
             confirmModal.classList.remove('active', 'closing');
         }, 400);
     }
 
-    async function deleteCurrentNote() {
-        closeConfirmModal();
+    // Mostrar toast de notificação
+    function showToast(message, type = 'success') {
+        const toastMessage = document.getElementById('toast-message');
+        toastMessage.textContent = message;
 
-        try {
-            const response = await fetch(`${API_BASE}/api/notas/${currentNote.id}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                // Remover da lista
-                userNotes = userNotes.filter(n => n.id !== currentNote.id);
-
-                if (userNotes.length > 0) {
-                    selectNote(userNotes[0]);
-                } else {
-                    emptyState.classList.add('visible');
-                    currentNote = null;
-                    noteTitleInput.value = '';
-                    noteContentInput.value = '';
-                    toggleTextareaScroll();
-                }
-
-                displayNotesList();
-                showToast('Nota excluída com sucesso!', 'success');
-            } else {
-                showToast('Erro ao excluir nota.', 'error');
-            }
-        } catch (error) {
-            console.error('Erro ao excluir nota:', error);
-            showToast('Erro ao conectar com o servidor.', 'error');
+        // Configurar o tipo
+        toast.className = 'toast';
+        if (type === 'error') {
+            toast.classList.add('error');
+            toast.querySelector('i').className = 'fas fa-exclamation-circle';
+        } else if (type === 'warning') {
+            toast.classList.add('warning');
+            toast.querySelector('i').className = 'fas fa-exclamation-triangle';
+        } else {
+            toast.querySelector('i').className = 'fas fa-check-circle';
         }
+
+        // Mostrar o toast
+        toast.classList.add('show');
+
+        // Ocultar após 3 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
     }
 
-    // Listener para tecla Escape sair do fullscreen
-    document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-            isFullscreen = false;
-            fullscreenToggle.innerHTML = '<i class="fas fa-expand"></i>';
-        }
-    });
-
-    // Inicializar estado da textarea
-    toggleTextareaScroll();
+    // Inicializar a aplicação
+    document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>

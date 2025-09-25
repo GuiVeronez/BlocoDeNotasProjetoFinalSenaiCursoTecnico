@@ -1138,22 +1138,6 @@
             </div>
             <div class="notes-list" id="notes-list">
                 <!-- Notas serão carregadas aqui -->
-                <div class="note-item selected">
-                    <div class="note-title">Nota de exemplo</div>
-                    <div class="note-preview">Esta é uma nota de exemplo para demonstrar o layout</div>
-                    <div class="note-date">
-                        <span>11/09/2025</span>
-                        <span>19:40</span>
-                    </div>
-                </div>
-                <div class="note-item">
-                    <div class="note-title">Outra nota</div>
-                    <div class="note-preview">Mais conteúdo de exemplo para visualização</div>
-                    <div class="note-date">
-                        <span>11/09/2025</span>
-                        <span>19:40</span>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -1208,6 +1192,9 @@
 </div>
 
 <script>
+    // URL base do backend
+    const API_BASE_URL = 'http://localhost:8080';
+
     // Elementos DOM
     const authContainer = document.getElementById('auth-container');
     const appContainer = document.getElementById('app-container');
@@ -1315,55 +1302,71 @@
     }
 
     // Manipular login
-    function handleLogin(e) {
+    async function handleLogin(e) {
         e.preventDefault();
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
 
-        // Verificar se o usuário existe
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const user = users.find(u => u.email === email && u.password === password);
+        try {
+            const response = await fetch(`${API_BASE_URL}/usuarios/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    senha: password
+                })
+            });
 
-        if (user) {
-            currentUser = user;
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            showApp();
-            showToast('Login realizado com sucesso!');
-        } else {
-            showToast('Email ou senha incorretos!', 'error');
+            if (response.ok) {
+                const user = await response.json();
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showApp();
+                showToast('Login realizado com sucesso!');
+            } else {
+                showToast('Email ou senha incorretos!', 'error');
+            }
+        } catch (error) {
+            console.error('Erro no login:', error);
+            showToast('Erro ao fazer login!', 'error');
         }
     }
 
     // Manipular cadastro
-    function handleRegister(e) {
+    async function handleRegister(e) {
         e.preventDefault();
         const name = document.getElementById('register-name').value;
         const email = document.getElementById('register-email').value;
         const password = document.getElementById('register-password').value;
 
-        // Verificar se o usuário já existe
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        if (users.some(u => u.email === email)) {
-            showToast('Este email já está em uso!', 'error');
-            return;
+        try {
+            const response = await fetch(`${API_BASE_URL}/usuarios`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nome: name,
+                    email: email,
+                    senha: password
+                })
+            });
+
+            if (response.ok) {
+                const newUser = await response.json();
+                currentUser = newUser;
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                showApp();
+                showToast('Conta criada com sucesso!');
+            } else {
+                showToast('Erro ao criar conta!', 'error');
+            }
+        } catch (error) {
+            console.error('Erro no cadastro:', error);
+            showToast('Erro ao criar conta!', 'error');
         }
-
-        // Criar novo usuário
-        const newUser = {
-            id: Date.now().toString(),
-            name,
-            email,
-            password,
-            avatar: name.charAt(0).toUpperCase()
-        };
-
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-
-        currentUser = newUser;
-        localStorage.setItem('currentUser', JSON.stringify(newUser));
-        showApp();
-        showToast('Conta criada com sucesso!');
     }
 
     // Alternar modo escuro
@@ -1428,22 +1431,30 @@
     // Carregar dados do usuário
     function loadUserData() {
         if (currentUser) {
-            userAvatar.textContent = currentUser.avatar;
-            userName.textContent = currentUser.name;
+            userAvatar.textContent = currentUser.nome ? currentUser.nome.charAt(0).toUpperCase() : 'U';
+            userName.textContent = currentUser.nome || 'Usuário';
         }
     }
 
     // Carregar notas do usuário
-    function loadNotes() {
-        const allNotes = JSON.parse(localStorage.getItem('notes') || '[]');
-        notes = allNotes.filter(note => note.userId === currentUser.id);
+    async function loadNotes() {
+        if (!currentUser || !currentUser.id) return;
 
-        renderNotesList();
+        try {
+            const response = await fetch(`${API_BASE_URL}/usuarios/${currentUser.id}/notas`);
+            if (response.ok) {
+                notes = await response.json();
+                renderNotesList();
 
-        if (notes.length > 0) {
-            selectNote(notes[0].id);
-        } else {
-            showEmptyState();
+                if (notes.length > 0) {
+                    selectNote(notes[0].id);
+                } else {
+                    showEmptyState();
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao carregar notas:', error);
+            showToast('Erro ao carregar notas!', 'error');
         }
     }
 
@@ -1452,14 +1463,14 @@
         notesList.innerHTML = '';
 
         notes.forEach(note => {
-            const noteDate = new Date(note.updatedAt);
+            const noteDate = new Date(note.updatedAt || note.createdAt || Date.now());
             const noteElement = document.createElement('div');
             noteElement.className = `note-item ${currentNoteId === note.id ? 'selected' : ''}`;
             noteElement.setAttribute('data-id', note.id);
 
             noteElement.innerHTML = `
-                <div class="note-title">${note.title || 'Sem título'}</div>
-                <div class="note-preview">${note.content.substring(0, 50)}${note.content.length > 50 ? '...' : ''}</div>
+                <div class="note-title">${note.titulo || 'Sem título'}</div>
+                <div class="note-preview">${note.conteudo ? (note.conteudo.substring(0, 50) + (note.conteudo.length > 50 ? '...' : '')) : 'Sem conteúdo'}</div>
                 <div class="note-date">
                     <span>${noteDate.toLocaleDateString()}</span>
                     <span>${noteDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
@@ -1477,14 +1488,14 @@
         const note = notes.find(n => n.id === noteId);
 
         if (note) {
-            noteTitleInput.value = note.title || '';
-            noteContentInput.value = note.content || '';
+            noteTitleInput.value = note.titulo || '';
+            noteContentInput.value = note.conteudo || '';
             hideEmptyState();
         }
 
         // Atualizar a lista para destacar a nota selecionada
         document.querySelectorAll('.note-item').forEach(item => {
-            if (item.getAttribute('data-id') === noteId) {
+            if (item.getAttribute('data-id') === noteId.toString()) {
                 item.classList.add('selected');
             } else {
                 item.classList.remove('selected');
@@ -1495,10 +1506,10 @@
     // Criar nova nota
     function createNewNote() {
         const newNote = {
-            id: Date.now().toString(),
-            userId: currentUser.id,
-            title: '',
-            content: '',
+            id: 'temp-' + Date.now(), // ID temporário
+            usuarioId: currentUser.id,
+            titulo: '',
+            conteudo: '',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
@@ -1532,63 +1543,90 @@
     }
 
     // Salvar nota atual
-    function saveCurrentNote() {
-        if (!currentNoteId) return;
+    async function saveCurrentNote() {
+        if (!currentNoteId || !currentUser) return;
 
-        const noteIndex = notes.findIndex(n => n.id === currentNoteId);
+        try {
+            const noteData = {
+                titulo: noteTitleInput.value,
+                conteudo: noteContentInput.value,
+                usuarioId: currentUser.id
+            };
 
-        if (noteIndex !== -1) {
-            notes[noteIndex].title = noteTitleInput.value;
-            notes[noteIndex].content = noteContentInput.value;
-            notes[noteIndex].updatedAt = new Date().toISOString();
-
-            // Salvar no localStorage
-            const allNotes = JSON.parse(localStorage.getItem('notes') || '[]');
-            const existingNoteIndex = allNotes.findIndex(n => n.id === currentNoteId);
-
-            if (existingNoteIndex !== -1) {
-                allNotes[existingNoteIndex] = notes[noteIndex];
+            let response;
+            if (currentNoteId.toString().includes('temp')) {
+                // Nova nota
+                response = await fetch(`${API_BASE_URL}/notas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(noteData)
+                });
             } else {
-                allNotes.push(notes[noteIndex]);
+                // Nota existente
+                response = await fetch(`${API_BASE_URL}/notas/${currentNoteId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(noteData)
+                });
             }
 
-            localStorage.setItem('notes', JSON.stringify(allNotes));
+            if (response.ok) {
+                const savedNote = await response.json();
 
-            // Atualizar a lista
-            renderNotesList();
-            showToast('Nota salva com sucesso!');
+                // Atualizar o ID da nota se for nova
+                if (currentNoteId.toString().includes('temp')) {
+                    const noteIndex = notes.findIndex(n => n.id === currentNoteId);
+                    if (noteIndex !== -1) {
+                        notes[noteIndex].id = savedNote.id;
+                        currentNoteId = savedNote.id;
+                    }
+                }
+
+                // Recarregar a lista
+                await loadNotes();
+                showToast('Nota salva com sucesso!');
+            } else {
+                showToast('Erro ao salvar nota!', 'error');
+            }
+        } catch (error) {
+            console.error('Erro ao salvar nota:', error);
+            showToast('Erro ao salvar nota!', 'error');
         }
     }
 
     // Confirmar exclusão de nota
     function confirmDeleteNote() {
-        if (!currentNoteId) return;
+        if (!currentNoteId || currentNoteId.toString().includes('temp')) {
+            showToast('Não é possível excluir uma nota não salva!', 'warning');
+            return;
+        }
         openModal();
     }
 
     // Excluir nota atual
-    function deleteCurrentNote() {
-        if (!currentNoteId) return;
+    async function deleteCurrentNote() {
+        if (!currentNoteId || currentNoteId.toString().includes('temp')) return;
 
-        // Remover do array de notas
-        notes = notes.filter(n => n.id !== currentNoteId);
+        try {
+            const response = await fetch(`${API_BASE_URL}/notas/${currentNoteId}`, {
+                method: 'DELETE'
+            });
 
-        // Remover do localStorage
-        const allNotes = JSON.parse(localStorage.getItem('notes') || '[]');
-        const updatedNotes = allNotes.filter(n => n.id !== currentNoteId);
-        localStorage.setItem('notes', JSON.stringify(updatedNotes));
-
-        // Atualizar a interface
-        renderNotesList();
-        closeModal();
-
-        if (notes.length > 0) {
-            selectNote(notes[0].id);
-        } else {
-            showEmptyState();
+            if (response.ok) {
+                closeModal();
+                await loadNotes(); // Recarregar a lista
+                showToast('Nota excluída com sucesso!');
+            } else {
+                showToast('Erro ao excluir nota!', 'error');
+            }
+        } catch (error) {
+            console.error('Erro ao excluir nota:', error);
+            showToast('Erro ao excluir nota!', 'error');
         }
-
-        showToast('Nota excluída com sucesso!');
     }
 
     // Mostrar estado vazio

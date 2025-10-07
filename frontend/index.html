@@ -1517,7 +1517,7 @@
             }
         } catch (error) {
             console.error('Erro no login:', error);
-            showToast('Erro de conexão! Verifique se o servidor está rodando.', 'error');
+            showToast('Erro ao conectar com o servidor. Tente novamente.', 'error');
         }
     }
 
@@ -1588,7 +1588,7 @@
             }
         } catch (error) {
             console.error('Erro no cadastro:', error);
-            showToast('Erro de conexão! Verifique se o servidor está rodando.', 'error');
+            showToast('Erro ao conectar com o servidor. Tente novamente.', 'error');
         }
     }
 
@@ -1598,47 +1598,43 @@
         return emailRegex.test(email);
     }
 
-    // Transição suave para o app
+    // Transição suave para o app - REMOVIDO O DELAY
     function transitionToApp() {
         // Preparar transição
         authContainer.classList.add('animate-fadeOut');
 
-        setTimeout(() => {
-            // Esconder auth e mostrar app
-            authContainer.classList.remove('visible');
-            appContainer.classList.add('visible', 'animate-in');
+        // Esconder auth e mostrar app SEM DELAY
+        authContainer.classList.remove('visible');
+        appContainer.classList.add('visible', 'animate-in');
 
-            // Resetar animação
-            setTimeout(() => {
-                authContainer.classList.remove('animate-fadeOut');
-                loadUserData();
-                loadNotes();
-            }, 50);
-        }, 300); // REDUZIDO de 400ms para 300ms
+        // Resetar animação
+        setTimeout(() => {
+            authContainer.classList.remove('animate-fadeOut');
+            loadUserData();
+            loadNotes();
+        }, 50);
     }
 
-    // Transição suave para a tela de auth
+    // Transição suave para a tela de auth - REMOVIDO O DELAY
     function transitionToAuth() {
         // Preparar transição
         appContainer.classList.add('animate-fadeOut');
 
+        // Esconder app e mostrar auth SEM DELAY
+        appContainer.classList.remove('visible');
+        authContainer.classList.add('visible', 'animate-in');
+        authCard.classList.add('animate-in');
+
+        // Resetar animação
         setTimeout(() => {
-            // Esconder app e mostrar auth
-            appContainer.classList.remove('visible');
-            authContainer.classList.add('visible', 'animate-in');
-            authCard.classList.add('animate-in');
+            appContainer.classList.remove('animate-fadeOut');
 
-            // Resetar animação
-            setTimeout(() => {
-                appContainer.classList.remove('animate-fadeOut');
-
-                // Resetar estado (mantendo formulários)
-                currentUser = null;
-                notes = [];
-                currentNoteId = null;
-                notesList.innerHTML = '';
-            }, 50);
-        }, 300); // REDUZIDO de 400ms para 300ms
+            // Resetar estado (mantendo formulários)
+            currentUser = null;
+            notes = [];
+            currentNoteId = null;
+            notesList.innerHTML = '';
+        }, 50);
     }
 
     // Alternar modo escuro com animação

@@ -1,11 +1,6 @@
 package com.blocodenotas.backend.dtos;
-import com.blocodenotas.backend.models.Nota;
-//import com.blocodenotas.backend.models.Pasta;
-import jakarta.persistence.*;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class UsuarioDTO {
     private Long id;
@@ -14,6 +9,13 @@ public class UsuarioDTO {
     private String senha;
 
     public UsuarioDTO() {}
+
+    public UsuarioDTO(Long id, String nome, String email, String senha) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+    }
 
     public Long getId() {
         return id;
@@ -45,5 +47,31 @@ public class UsuarioDTO {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioDTO that = (UsuarioDTO) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(nome, that.nome) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(senha, that.senha);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, email, senha);
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                '}';
     }
 }

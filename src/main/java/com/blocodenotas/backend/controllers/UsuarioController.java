@@ -24,11 +24,20 @@ public class UsuarioController {
 
     // Criar usuário (cadastro)
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        return ResponseEntity.ok(usuarioService.salvarUsuario(usuarioDTO));
+    public ResponseEntity<?> criarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        try {
+            UsuarioDTO usuarioCriado = usuarioService.salvarUsuario(usuarioDTO);
+            return ResponseEntity.ok(usuarioCriado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("{\"message\": \"" + e.getMessage() + "\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"message\": \"Erro interno do servidor\"}");
+        }
     }
 
-    // Login (agora via POST)
+    // Login
     @PostMapping("/login")
     public ResponseEntity<UsuarioDTO> loginUsuario(@RequestBody UsuarioDTO loginDTO) {
         UsuarioDTO usuarioDTO = usuarioService.autenticarUsuario(loginDTO.getEmail(), loginDTO.getSenha());
@@ -39,7 +48,7 @@ public class UsuarioController {
         }
     }
 
-    // Buscar todos usuários (opcional, mais para debug/admin)
+    // Buscar todos usuários
     @GetMapping
     public ResponseEntity<List<UsuarioDTO>> buscarTodosUsuarios() {
         List<UsuarioDTO> usuarios = usuarioService.buscarTodosUsuariosDTO();
@@ -51,5 +60,4 @@ public class UsuarioController {
     public ResponseEntity<List<NotaDTO>> listarNotasPorUsuario(@PathVariable Long id) {
         return ResponseEntity.ok(notaService.buscarNotasPorUsuarioId(id));
     }
-
 }

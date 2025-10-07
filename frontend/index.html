@@ -88,9 +88,10 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Animações */
+        /* Animações - TEMPOS REDUZIDOS */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -148,62 +149,133 @@
             100% { box-shadow: 0 0 5px rgba(255, 213, 74, 0.5); }
         }
 
+        @keyframes noteSlideIn {
+            from { transform: translateX(-10px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes blurFadeIn {
+            from {
+                opacity: 0;
+                filter: blur(5px);
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                filter: blur(0);
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes authCardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes appContainerFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .animate-fadeIn {
-            animation: fadeIn 0.4s ease forwards;
+            animation: fadeIn 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .animate-fadeOut {
-            animation: fadeOut 0.4s ease forwards;
+            animation: fadeOut 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .animate-slideIn {
-            animation: slideIn 0.3s ease forwards;
+            animation: slideIn 0.25s ease forwards; /* REDUZIDO de 0.3s para 0.25s */
         }
 
         .animate-slideUp {
-            animation: slideUp 0.5s ease forwards;
+            animation: slideUp 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .animate-blurIn {
-            animation: blurIn 0.4s ease forwards;
+            animation: blurIn 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .animate-blurOut {
-            animation: blurOut 0.4s ease forwards;
+            animation: blurOut 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .animate-pulse {
-            animation: pulse 0.5s ease;
+            animation: pulse 0.4s ease; /* REDUZIDO de 0.5s para 0.4s */
         }
 
         .animate-scaleUp {
-            animation: scaleUp 0.3s ease forwards;
+            animation: scaleUp 0.25s ease forwards; /* REDUZIDO de 0.3s para 0.25s */
         }
 
         .animate-modalFadeIn {
-            animation: modalFadeIn 0.4s ease forwards;
+            animation: modalFadeIn 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .animate-modalFadeOut {
-            animation: modalFadeOut 0.4s ease forwards;
+            animation: modalFadeOut 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .animate-glow {
-            animation: glow 2s infinite;
+            animation: glow 1.5s infinite; /* REDUZIDO de 2s para 1.5s */
+        }
+
+        .animate-noteSlideIn {
+            animation: noteSlideIn 0.25s ease forwards; /* REDUZIDO de 0.3s para 0.25s */
+        }
+
+        .animate-blurFadeIn {
+            animation: blurFadeIn 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
+        }
+
+        .animate-authCardFadeIn {
+            animation: authCardFadeIn 0.4s ease forwards; /* REDUZIDO de 0.6s para 0.4s */
+        }
+
+        .animate-appContainerFadeIn {
+            animation: appContainerFadeIn 0.4s ease forwards; /* REDUZIDO de 0.6s para 0.4s */
         }
 
         /* Tela de Login/Cadastro */
         .auth-container {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
             background-color: var(--auth-bg);
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             overflow: hidden;
             transition: background-color 0.3s ease;
+            opacity: 0;
+            z-index: 100;
+        }
+
+        .auth-container.visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        .auth-container.animate-in {
+            animation: fadeIn 0.4s ease forwards; /* REDUZIDO de 0.6s para 0.4s */
         }
 
         .auth-header {
@@ -247,15 +319,14 @@
             z-index: 1;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s ease;
             border: 2px solid var(--border);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
         }
 
-        .auth-card.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .auth-card.animate-in {
+            animation: authCardFadeIn 0.4s ease forwards; /* REDUZIDO de 0.6s para 0.4s */
         }
 
         .app-logo {
@@ -263,6 +334,7 @@
             color: var(--auth-button-color);
             font-size: 42px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
         .app-title {
@@ -270,6 +342,7 @@
             font-weight: 700;
             margin-bottom: 30px;
             color: var(--on-primary);
+            transition: all 0.3s ease;
         }
 
         .auth-tabs {
@@ -279,6 +352,8 @@
             overflow: hidden;
             background-color: var(--hover);
             border: 1px solid var(--border);
+            position: relative;
+            transition: all 0.3s ease;
         }
 
         .auth-tab {
@@ -291,22 +366,38 @@
             position: relative;
             color: #FFFFFF;
             background-color: transparent;
+            z-index: 1;
         }
 
         .auth-tab.active {
-            background-color: var(--auth-tab-active);
             color: #1A1A1A;
         }
 
-        .auth-tab:not(.active):hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .auth-tab-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background-color: var(--auth-tab-active);
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* REDUZIDO de 0.4s para 0.3s */
+            z-index: 0;
+        }
+
+        .auth-tab-slider.login {
+            transform: translateX(0);
+        }
+
+        .auth-tab-slider.register {
+            transform: translateX(100%);
         }
 
         .auth-form {
             opacity: 0;
             height: 0;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .auth-form.active {
@@ -317,6 +408,7 @@
         .form-group {
             margin-bottom: 20px;
             text-align: left;
+            transition: all 0.3s ease; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .form-group label {
@@ -324,6 +416,7 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--on-primary);
+            transition: all 0.3s ease; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .dark-mode .form-group label {
@@ -345,6 +438,11 @@
             outline: none;
             border-color: var(--input-focus-border);
             box-shadow: 0 0 0 3px rgba(63, 131, 227, 0.2);
+        }
+
+        .form-group input.invalid {
+            border-color: var(--error);
+            box-shadow: 0 0 0 2px rgba(225, 66, 66, 0.2);
         }
 
         .auth-button {
@@ -374,7 +472,7 @@
             background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.2) 100%);
             border-radius: 10px;
             transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* REDUZIDO de 0.4s para 0.3s */
             z-index: -1;
         }
 
@@ -399,11 +497,18 @@
             height: 100vh;
             background-color: var(--background);
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .app-container.visible {
+            display: flex;
             opacity: 1;
+            transform: translateY(0);
+        }
+
+        .app-container.animate-in {
+            animation: appContainerFadeIn 0.4s ease forwards; /* REDUZIDO de 0.6s para 0.4s */
         }
 
         header {
@@ -415,6 +520,7 @@
             box-shadow: 0 2px 10px var(--shadow);
             z-index: 10;
             border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .app-title-bar {
@@ -426,12 +532,14 @@
         .app-icon {
             color: var(--primary);
             font-size: 22px;
+            transition: color 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .app-name {
             font-weight: 600;
             font-size: 18px;
             color: var(--on-surface);
+            transition: color 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .header-actions {
@@ -469,6 +577,7 @@
             border-radius: 18px;
             background-color: var(--hover);
             border: 1px solid var(--border);
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .user-avatar {
@@ -483,12 +592,14 @@
             font-weight: bold;
             font-size: 14px;
             border: 2px solid var(--accent);
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .user-name {
             font-weight: 600;
             font-size: 14px;
             color: var(--on-surface);
+            transition: color 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .logout-btn {
@@ -511,6 +622,7 @@
             display: flex;
             flex: 1;
             overflow: hidden;
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .sidebar {
@@ -520,6 +632,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .sidebar-header {
@@ -528,12 +641,14 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .sidebar-title {
             font-weight: 600;
             font-size: 16px;
             color: var(--on-primary);
+            transition: color 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .add-note-btn {
@@ -566,6 +681,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 10px;
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .note-item {
@@ -578,17 +694,28 @@
             border: 1px solid var(--border);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             position: relative;
+            transform: translateX(-5px);
+            opacity: 0;
         }
 
-        /* REMOVIDO: Efeito de hover nas notas */
+        .note-item.animate-in {
+            animation: noteSlideIn 0.25s ease forwards; /* REDUZIDO de 0.3s para 0.25s */
+        }
+
+        .note-item.new-note {
+            animation: blurFadeIn 0.4s ease forwards; /* REDUZIDO de 0.5s para 0.4s */
+        }
+
         .note-item:hover {
-            transform: translateX(0);
-            border-color: var(--border);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: var(--note-hover-border);
         }
 
         .note-item.selected {
             background-color: var(--selected-note-bg);
             border-left: 4px solid var(--note-border-accent);
+            transform: translateX(0);
         }
 
         .note-title {
@@ -599,6 +726,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             color: var(--on-surface);
+            transition: color 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .note-preview {
@@ -609,6 +737,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             margin-bottom: 5px;
+            transition: color 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .note-date {
@@ -617,6 +746,7 @@
             opacity: 0.9;
             display: flex;
             justify-content: space-between;
+            transition: color 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .notes-content {
@@ -626,6 +756,7 @@
             background-color: var(--background);
             overflow: hidden;
             position: relative;
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .notes-header {
@@ -635,6 +766,7 @@
             padding: 16px 20px;
             background-color: var(--surface);
             border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .notes-title {
@@ -703,6 +835,7 @@
             flex-direction: column;
             padding: 20px;
             overflow: hidden;
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .note-editor textarea {
@@ -753,7 +886,7 @@
             background-color: var(--background);
             z-index: 5;
             pointer-events: none;
-            transition: opacity 0.4s ease;
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .empty-state.visible {
@@ -766,6 +899,7 @@
             margin-bottom: 20px;
             color: var(--primary);
             opacity: 0.7;
+            transition: all 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .empty-state p {
@@ -774,6 +908,7 @@
             opacity: 0.8;
             max-width: 400px;
             line-height: 1.5;
+            transition: color 0.3s ease; /* REDUZIDO de 0.5s para 0.3s */
         }
 
         .empty-state button {
@@ -818,7 +953,7 @@
             align-items: center;
             z-index: 1000;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.3s ease; /* REDUZIDO de 0.4s para 0.3s */
             backdrop-filter: blur(0px);
             background-color: rgba(0, 0, 0, 0);
         }
@@ -826,11 +961,11 @@
         .custom-modal.active {
             display: flex;
             opacity: 1;
-            animation: blurIn 0.4s ease forwards;
+            animation: blurIn 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .custom-modal.closing {
-            animation: blurOut 0.4s ease forwards;
+            animation: blurOut 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .custom-modal-content {
@@ -842,16 +977,16 @@
             overflow: hidden;
             transform: scale(0.95);
             opacity: 0;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease; /* REDUZIDO de 0.4s para 0.3s */
             border: 2px solid var(--primary);
         }
 
         .custom-modal.active .custom-modal-content {
-            animation: modalFadeIn 0.4s ease forwards;
+            animation: modalFadeIn 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .custom-modal.closing .custom-modal-content {
-            animation: modalFadeOut 0.4s ease forwards;
+            animation: modalFadeOut 0.3s ease forwards; /* REDUZIDO de 0.4s para 0.3s */
         }
 
         .custom-modal-header {
@@ -944,7 +1079,7 @@
             z-index: 1001;
             transform: translateY(100px);
             opacity: 0;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease; /* REDUZIDO de 0.4s para 0.3s */
             border-left: 4px solid var(--success);
         }
 
@@ -1070,6 +1205,7 @@
         <h1 class="app-title">Bloco de Notas</h1>
 
         <div class="auth-tabs">
+            <div class="auth-tab-slider" id="auth-tab-slider"></div>
             <div class="auth-tab active" id="login-tab">Login</div>
             <div class="auth-tab" id="register-tab">Cadastro</div>
         </div>
@@ -1203,6 +1339,7 @@
     const registerForm = document.getElementById('register-form');
     const loginTab = document.getElementById('login-tab');
     const registerTab = document.getElementById('register-tab');
+    const authTabSlider = document.getElementById('auth-tab-slider');
     const themeToggle = document.getElementById('theme-toggle');
     const authThemeToggle = document.getElementById('auth-theme-toggle');
     const fullscreenToggle = document.getElementById('fullscreen-toggle');
@@ -1226,6 +1363,7 @@
     let notes = [];
     let currentNoteId = null;
     let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    let isTransitioning = false;
 
     // Inicialização
     function init() {
@@ -1259,6 +1397,10 @@
         loginForm.addEventListener('submit', handleLogin);
         registerForm.addEventListener('submit', handleRegister);
 
+        // Validação do nome no cadastro
+        const nameInput = document.getElementById('register-name');
+        nameInput.addEventListener('input', validateName);
+
         // Alternar tema
         themeToggle.addEventListener('click', toggleDarkMode);
         authThemeToggle.addEventListener('click', toggleDarkMode);
@@ -1286,18 +1428,56 @@
         noteContentInput.addEventListener('input', handleNoteInput);
     }
 
-    // Alternar entre as abas de login e cadastro
+    // Validar nome (apenas letras, espaços e acentos)
+    function validateName(e) {
+        const name = e.target.value;
+        const nameRegex = /^[a-zA-ZÀ-ÿ\s]*$/;
+
+        if (!nameRegex.test(name)) {
+            e.target.value = name.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+            showToast('Números ou caracteres especiais não são aceitos.', 'warning');
+        }
+    }
+
+    // Alternar entre as abas de login e cadastro com animação
     function switchAuthTab(tab) {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
         if (tab === 'login') {
+            // Transição suave para login
             loginTab.classList.add('active');
             registerTab.classList.remove('active');
-            loginForm.classList.add('active');
-            registerForm.classList.remove('active');
+            authTabSlider.classList.remove('register');
+            authTabSlider.classList.add('login');
+
+            // Animação suave dos formulários
+            registerForm.style.opacity = '0';
+            setTimeout(() => {
+                registerForm.classList.remove('active');
+                loginForm.classList.add('active');
+                setTimeout(() => {
+                    loginForm.style.opacity = '1';
+                    isTransitioning = false;
+                }, 50);
+            }, 150); // REDUZIDO de 200ms para 150ms
         } else {
+            // Transição suave para cadastro
             registerTab.classList.add('active');
             loginTab.classList.remove('active');
-            registerForm.classList.add('active');
-            loginForm.classList.remove('active');
+            authTabSlider.classList.remove('login');
+            authTabSlider.classList.add('register');
+
+            // Animação suave dos formulários
+            loginForm.style.opacity = '0';
+            setTimeout(() => {
+                loginForm.classList.remove('active');
+                registerForm.classList.add('active');
+                setTimeout(() => {
+                    registerForm.style.opacity = '1';
+                    isTransitioning = false;
+                }, 50);
+            }, 150); // REDUZIDO de 200ms para 150ms
         }
     }
 
@@ -1306,6 +1486,12 @@
         e.preventDefault();
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
+
+        // Validação básica
+        if (!email || !password) {
+            showToast('Preencha todos os campos!', 'error');
+            return;
+        }
 
         try {
             const response = await fetch(`${API_BASE_URL}/usuarios/login`, {
@@ -1323,14 +1509,15 @@
                 const user = await response.json();
                 currentUser = user;
                 localStorage.setItem('currentUser', JSON.stringify(user));
-                showApp();
+                transitionToApp();
                 showToast('Login realizado com sucesso!');
             } else {
+                // Mensagem de erro unificada para segurança
                 showToast('Email ou senha incorretos!', 'error');
             }
         } catch (error) {
             console.error('Erro no login:', error);
-            showToast('Erro ao fazer login!', 'error');
+            showToast('Erro de conexão! Verifique se o servidor está rodando.', 'error');
         }
     }
 
@@ -1340,6 +1527,34 @@
         const name = document.getElementById('register-name').value;
         const email = document.getElementById('register-email').value;
         const password = document.getElementById('register-password').value;
+
+        // Validações
+        if (!name || !email || !password) {
+            showToast('Preencha todos os campos!', 'error');
+            return;
+        }
+
+        if (name.length < 2) {
+            showToast('Nome deve ter pelo menos 2 caracteres!', 'error');
+            return;
+        }
+
+        if (password.length < 4) {
+            showToast('Senha deve ter pelo menos 4 caracteres!', 'error');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            showToast('Email inválido!', 'error');
+            return;
+        }
+
+        // Validar nome (apenas letras, espaços e acentos)
+        const nameRegex = /^[a-zA-ZÀ-ÿ\s]{2,}$/;
+        if (!nameRegex.test(name)) {
+            showToast('Números ou caracteres especiais não são aceitos.', 'error');
+            return;
+        }
 
         try {
             const response = await fetch(`${API_BASE_URL}/usuarios`, {
@@ -1358,21 +1573,84 @@
                 const newUser = await response.json();
                 currentUser = newUser;
                 localStorage.setItem('currentUser', JSON.stringify(newUser));
-                showApp();
+
+                // Salvar também no localStorage para verificação de login
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+
+                transitionToApp();
                 showToast('Conta criada com sucesso!');
+            } else if (response.status === 400) {
+                showToast('Este email já está em uso!', 'error');
             } else {
                 showToast('Erro ao criar conta!', 'error');
             }
         } catch (error) {
             console.error('Erro no cadastro:', error);
-            showToast('Erro ao criar conta!', 'error');
+            showToast('Erro de conexão! Verifique se o servidor está rodando.', 'error');
         }
     }
 
-    // Alternar modo escuro
+    // Validar email
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Transição suave para o app
+    function transitionToApp() {
+        // Preparar transição
+        authContainer.classList.add('animate-fadeOut');
+
+        setTimeout(() => {
+            // Esconder auth e mostrar app
+            authContainer.classList.remove('visible');
+            appContainer.classList.add('visible', 'animate-in');
+
+            // Resetar animação
+            setTimeout(() => {
+                authContainer.classList.remove('animate-fadeOut');
+                loadUserData();
+                loadNotes();
+            }, 50);
+        }, 300); // REDUZIDO de 400ms para 300ms
+    }
+
+    // Transição suave para a tela de auth
+    function transitionToAuth() {
+        // Preparar transição
+        appContainer.classList.add('animate-fadeOut');
+
+        setTimeout(() => {
+            // Esconder app e mostrar auth
+            appContainer.classList.remove('visible');
+            authContainer.classList.add('visible', 'animate-in');
+            authCard.classList.add('animate-in');
+
+            // Resetar animação
+            setTimeout(() => {
+                appContainer.classList.remove('animate-fadeOut');
+
+                // Resetar estado (mantendo formulários)
+                currentUser = null;
+                notes = [];
+                currentNoteId = null;
+                notesList.innerHTML = '';
+            }, 50);
+        }, 300); // REDUZIDO de 400ms para 300ms
+    }
+
+    // Alternar modo escuro com animação
     function toggleDarkMode() {
         isDarkMode = !isDarkMode;
         localStorage.setItem('darkMode', isDarkMode);
+
+        // Aplicar transição de cor suave em todos os elementos
+        const allElements = document.querySelectorAll('*');
+        allElements.forEach(el => {
+            el.style.transition = 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease';
+        });
 
         if (isDarkMode) {
             document.body.classList.add('dark-mode');
@@ -1383,6 +1661,13 @@
             themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
             authThemeToggle.innerHTML = '<i class="fas fa-moon"></i>';
         }
+
+        // Remover as transições após a animação
+        setTimeout(() => {
+            allElements.forEach(el => {
+                el.style.transition = '';
+            });
+        }, 300); // REDUZIDO de 500ms para 300ms
     }
 
     // Alternar tela cheia
@@ -1402,30 +1687,23 @@
     function handleLogout() {
         currentUser = null;
         localStorage.removeItem('currentUser');
-        showAuth();
+        transitionToAuth();
         showToast('Logout realizado com sucesso!');
     }
 
     // Mostrar tela de autenticação
     function showAuth() {
-        appContainer.style.display = 'none';
-        authContainer.style.display = 'flex';
-
-        setTimeout(() => {
-            authCard.classList.add('visible');
-        }, 100);
+        appContainer.classList.remove('visible');
+        authContainer.classList.add('visible', 'animate-in');
+        authCard.classList.add('animate-in');
     }
 
     // Mostrar aplicativo
     function showApp() {
-        authContainer.style.display = 'none';
-        appContainer.style.display = 'flex';
-
-        setTimeout(() => {
-            appContainer.classList.add('visible');
-            loadUserData();
-            loadNotes();
-        }, 100);
+        authContainer.classList.remove('visible');
+        appContainer.classList.add('visible', 'animate-in');
+        loadUserData();
+        loadNotes();
     }
 
     // Carregar dados do usuário
@@ -1446,9 +1724,9 @@
                 notes = await response.json();
                 renderNotesList();
 
-                if (notes.length > 0) {
+                if (notes.length > 0 && !currentNoteId) {
                     selectNote(notes[0].id);
-                } else {
+                } else if (notes.length === 0) {
                     showEmptyState();
                 }
             }
@@ -1458,27 +1736,63 @@
         }
     }
 
-    // Renderizar lista de notas
+    // Renderizar lista de notas com animação apenas para novas notas
     function renderNotesList() {
-        notesList.innerHTML = '';
+        const currentNotes = Array.from(notesList.children);
 
-        notes.forEach(note => {
+        notes.forEach((note, index) => {
             const noteDate = new Date(note.updatedAt || note.createdAt || Date.now());
-            const noteElement = document.createElement('div');
-            noteElement.className = `note-item ${currentNoteId === note.id ? 'selected' : ''}`;
-            noteElement.setAttribute('data-id', note.id);
 
-            noteElement.innerHTML = `
-                <div class="note-title">${note.titulo || 'Sem título'}</div>
-                <div class="note-preview">${note.conteudo ? (note.conteudo.substring(0, 50) + (note.conteudo.length > 50 ? '...' : '')) : 'Sem conteúdo'}</div>
-                <div class="note-date">
+            // Verificar se a nota já existe na lista
+            const existingNote = currentNotes.find(item => item.getAttribute('data-id') === note.id.toString());
+
+            if (!existingNote) {
+                // Criar nova nota com animação
+                const noteElement = document.createElement('div');
+                noteElement.className = `note-item new-note ${currentNoteId === note.id ? 'selected' : ''}`;
+                noteElement.setAttribute('data-id', note.id);
+
+                noteElement.innerHTML = `
+                    <div class="note-title">${note.titulo || 'Sem título'}</div>
+                    <div class="note-preview">${note.conteudo ? (note.conteudo.substring(0, 50) + (note.conteudo.length > 50 ? '...' : '')) : 'Sem conteúdo'}</div>
+                    <div class="note-date">
+                        <span>${noteDate.toLocaleDateString()}</span>
+                        <span>${noteDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                    </div>
+                `;
+
+                noteElement.addEventListener('click', () => selectNote(note.id));
+
+                // Adicionar no início da lista
+                if (notesList.firstChild) {
+                    notesList.insertBefore(noteElement, notesList.firstChild);
+                } else {
+                    notesList.appendChild(noteElement);
+                }
+            } else {
+                // Atualizar nota existente sem animação
+                existingNote.className = `note-item ${currentNoteId === note.id ? 'selected' : ''}`;
+                existingNote.querySelector('.note-title').textContent = note.titulo || 'Sem título';
+                existingNote.querySelector('.note-preview').textContent = note.conteudo ?
+                    (note.conteudo.substring(0, 50) + (note.conteudo.length > 50 ? '...' : '')) : 'Sem conteúdo';
+                existingNote.querySelector('.note-date').innerHTML = `
                     <span>${noteDate.toLocaleDateString()}</span>
                     <span>${noteDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-                </div>
-            `;
+                `;
 
-            noteElement.addEventListener('click', () => selectNote(note.id));
-            notesList.appendChild(noteElement);
+                // Adicionar animação de entrada para notas existentes
+                if (!existingNote.classList.contains('animate-in')) {
+                    existingNote.classList.add('animate-in');
+                }
+            }
+        });
+
+        // Remover notas que não existem mais
+        currentNotes.forEach(existingNote => {
+            const noteId = existingNote.getAttribute('data-id');
+            if (!notes.some(note => note.id.toString() === noteId)) {
+                existingNote.remove();
+            }
         });
     }
 
@@ -1514,6 +1828,7 @@
             updatedAt: new Date().toISOString()
         };
 
+        // Adicionar no início da lista
         notes.unshift(newNote);
         currentNoteId = newNote.id;
 
@@ -1521,7 +1836,7 @@
         noteTitleInput.value = '';
         noteContentInput.value = '';
 
-        // Atualizar a interface
+        // Atualizar a interface apenas com a nova nota
         renderNotesList();
         hideEmptyState();
 
@@ -1533,8 +1848,6 @@
 
     // Manipular entrada de nota
     function handleNoteInput() {
-        // Esta função pode ser usada para salvar automaticamente após um tempo
-        // Por enquanto, apenas verifica se há conteúdo para mostrar/ocultar o estado vazio
         if (noteTitleInput.value.trim() || noteContentInput.value.trim()) {
             hideEmptyState();
         } else {
@@ -1653,7 +1966,7 @@
         confirmModal.classList.add('closing');
         setTimeout(() => {
             confirmModal.classList.remove('active', 'closing');
-        }, 400);
+        }, 300); // REDUZIDO de 400ms para 300ms
     }
 
     // Mostrar toast de notificação

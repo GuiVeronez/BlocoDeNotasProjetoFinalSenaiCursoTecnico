@@ -1,4 +1,5 @@
 package com.blocodenotas.backend.models;
+
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -6,14 +7,23 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuarios", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+})
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
+
+    @Column(unique = true)
     private String email;
+
     private String senha;
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private Set<Nota> notas = new HashSet<>();
 
     public Usuario() {}
 
@@ -68,7 +78,10 @@ public class Usuario {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id) && Objects.equals(nome, usuario.nome) && Objects.equals(email, usuario.email) && Objects.equals(senha, usuario.senha);
+        return Objects.equals(id, usuario.id) &&
+                Objects.equals(nome, usuario.nome) &&
+                Objects.equals(email, usuario.email) &&
+                Objects.equals(senha, usuario.senha);
     }
 
     @Override
@@ -85,10 +98,4 @@ public class Usuario {
                 ", senha='" + senha + '\'' +
                 '}';
     }
-
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
-    private Set<Nota> notas = new HashSet<>();
-
-//    @OneToMany(mappedBy = "usuarioPasta", fetch = FetchType.LAZY)
-//    private Set<Pasta> pastas = new HashSet<>();
 }

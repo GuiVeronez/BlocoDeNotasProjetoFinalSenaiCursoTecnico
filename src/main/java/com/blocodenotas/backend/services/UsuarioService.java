@@ -18,6 +18,12 @@ public class UsuarioService {
 
     // Salvar usuário (cadastro)
     public UsuarioDTO salvarUsuario(UsuarioDTO usuarioDTO) {
+        // Verificar se o email já existe
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuarioDTO.getEmail());
+        if (usuarioExistente.isPresent()) {
+            throw new IllegalArgumentException("Email já está em uso");
+        }
+
         Usuario usuario = converterDTOParaUsuario(usuarioDTO);
         usuario = usuarioRepository.save(usuario);
         return converterUsuarioParaDTO(usuario);
